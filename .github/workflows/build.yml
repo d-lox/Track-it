@@ -25,14 +25,15 @@ jobs:
           java-version: '17'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          npm install @capacitor/assets --save-dev
 
       - name: Prepare Web Directory
         run: |
           mkdir -p www
-          cp -r css www/
+          cp -r css www/ 2>/dev/null || true
           cp *.png www/
-          cp *.js www/ 2>/dev/null || true
           if [ -f Index.html ]; then cp Index.html www/index.html; fi
           if [ -f index.html ]; then cp index.html www/index.html; fi
           if [ -f manifest.json ]; then cp manifest.json www/; fi
@@ -41,16 +42,14 @@ jobs:
       - name: Add Android Platform
         run: npx cap add android
 
-      - name: Override App Icon
+      - name: Generate App Icons
         run: |
-          # This replaces the default Capacitor logo with your Yes.png
-          if [ -f Yes.png ]; then
-            cp Yes.png android/app/src/main/res/mipmap-hdpi/ic_launcher.png
-            cp Yes.png android/app/src/main/res/mipmap-mdpi/ic_launcher.png
-            cp Yes.png android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
-            cp Yes.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
-            cp Yes.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
-          fi
+          # This creates the icon folders and uses Yes.png to build the app icon
+          mkdir -p assets
+          cp Yes.png assets/icon-only.png
+          cp Yes.png assets/icon-foreground.png
+          cp Yes.png assets/icon-background.png
+          npx capacitor-assets generate --android
 
       - name: Sync Web Code to Android
         run: npx cap sync android
