@@ -6,37 +6,43 @@
   <meta name="theme-color" content="#0b0b0f" />
   <title>Track It</title>
 
-  <!-- App icon (with background) -->
-  <link rel="icon" type="image/png" href="assets/yes.png" />
-  <link rel="apple-touch-icon" href="assets/yes.png" />
+  <!-- App icon -->
+  <link rel="icon" type="image/png" href="Yes.png" />
+  <link rel="apple-touch-icon" href="Yes.png" />
 
-  <!-- Foundation styles -->
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/theme.css" />
   <link rel="stylesheet" href="css/glass.css" />
 </head>
-<body>
 
-  <!-- Ambient light background (motion-reactive later) -->
+<!-- We set the default theme and accent here -->
+<body data-theme="dark" data-accent="blue">
+
+  <!-- Ambient light background -->
   <div id="ambient" class="ambient"></div>
 
   <!-- App shell -->
   <main id="app" class="app">
 
-    <!-- Temporary demo card — just to eyeball the vibe -->
+    <!-- Demo card -->
     <section class="glass demo-card">
       <div class="demo-icon">
-        <img src="assets/no.png" alt="Track It" />
+        <!-- Updated path to match your repo -->
+        <img src="No.png" alt="Track It" />
       </div>
       <h1 class="demo-title">Track It</h1>
       <p class="demo-sub">Your month, in glass.</p>
     </section>
 
-    <p class="demo-hint">
-      Foundation ready → next: theme.css, then ambient.js, then onboarding.
-    </p>
+    <!-- Quick Theme Testing Buttons -->
+    <div style="display: flex; gap: 10px; margin-top: 20px; z-index: 10;">
+      <button onclick="document.body.dataset.theme='dark'" style="padding: 10px; border-radius: 8px; border: none; background: #333; color: white;">Dark</button>
+      <button onclick="document.body.dataset.theme='warm'" style="padding: 10px; border-radius: 8px; border: none; background: #5c3a21; color: white;">Warm</button>
+      <button onclick="document.body.dataset.theme='amoled'" style="padding: 10px; border-radius: 8px; border: none; background: #000; color: white; border: 1px solid #444;">AMOLED</button>
+      <button onclick="document.body.dataset.accent='green'" style="padding: 10px; border-radius: 8px; border: none; background: #4ade80; color: black;">Accent</button>
+    </div>
 
   </main>
 
-  <!-- App JS (added later) -->
-  <!-- <script src="js/app.js" type="module"></script> -->
 </body>
 </html>
