@@ -1,0 +1,21 @@
+{
+  "name": "Track It",
+  "short_name": "TrackIt",
+  "description": "Your month, in glass.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0b0b0f",
+  "theme_color": "#0b0b0f",
+  "icons": [
+    {
+      "src": "Yes.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "Yes.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
