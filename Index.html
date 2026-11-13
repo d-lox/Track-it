@@ -5,46 +5,120 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0b0b0f" />
   <title>Track It</title>
-
-  <!-- App icon -->
   <link rel="icon" type="image/png" href="Yes.png" />
-  <link rel="apple-touch-icon" href="Yes.png" />
-
-  <!-- PWA Manifest -->
   <link rel="manifest" href="manifest.json" />
-
-  <!-- Stylesheets -->
   <link rel="stylesheet" href="css/theme.css" />
   <link rel="stylesheet" href="css/glass.css" />
 </head>
 
-<!-- We set the default theme and accent here -->
 <body data-theme="dark" data-accent="blue">
 
-  <!-- Ambient light background -->
   <div id="ambient" class="ambient"></div>
 
-  <!-- App shell -->
-  <main id="app" class="app">
+  <!-- TOP HEADER -->
+  <header class="top-bar">
+    <button class="icon-btn" onclick="toggleMenu()">☰</button>
+    <h2 class="logo">Track It</h2>
+    <div class="header-right">
+      <button class="icon-btn">🔍</button>
+      <button class="icon-btn" onclick="toggleSettings()">⚙️</button>
+    </div>
+  </header>
 
-    <!-- Demo card -->
-    <section class="glass demo-card">
-      <div class="demo-icon">
-        <img src="No.png" alt="Track It" />
+  <!-- MAIN APP -->
+  <main id="app" class="app">
+    
+    <!-- BALANCE CARD -->
+    <section class="glass balance-card">
+      <p class="sub">November Budget</p>
+      <h1 class="amount">₹9,500 <span class="total">/ ₹10,000</span></h1>
+      <div class="progress-bg">
+        <div class="progress-fill" style="width: 95%;"></div>
       </div>
-      <h1 class="demo-title">Track It</h1>
-      <p class="demo-sub">Your month, in glass.</p>
+      <p class="savings">₹500 left to save</p>
     </section>
 
-    <!-- Quick Theme Testing Buttons -->
-    <div style="display: flex; gap: 10px; margin-top: 20px; z-index: 10;">
-      <button onclick="document.body.dataset.theme='dark'" style="padding: 10px; border-radius: 8px; border: none; background: #333; color: white;">Dark</button>
-      <button onclick="document.body.dataset.theme='warm'" style="padding: 10px; border-radius: 8px; border: none; background: #5c3a21; color: white;">Warm</button>
-      <button onclick="document.body.dataset.theme='amoled'" style="padding: 10px; border-radius: 8px; border: none; background: #000; color: white; border: 1px solid #444;">AMOLED</button>
-      <button onclick="document.body.dataset.accent='green'" style="padding: 10px; border-radius: 8px; border: none; background: #4ade80; color: black;">Accent</button>
-    </div>
+    <!-- CATEGORIES -->
+    <section class="glass categories">
+      <h3>Categories</h3>
+      <div class="category-item">
+        <span>✈️ Travel</span> <span>₹2,000</span>
+      </div>
+      <div class="category-item">
+        <span>🍔 Food</span> <span>₹3,500</span>
+      </div>
+      <div class="category-item">
+        <span>👕 Clothing</span> <span>₹1,500</span>
+      </div>
+      <button class="add-cat-btn">+ Add Category</button>
+    </section>
 
   </main>
 
+  <!-- BOTTOM NAVIGATION -->
+  <nav class="bottom-nav">
+    <button class="nav-btn">📅</button>
+    <button class="nav-btn fab" onclick="toggleAddExpense()">+</button>
+  </nav>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- MENU & CALCULATOR -->
+  <div id="menu-modal" class="modal-overlay" onclick="toggleMenu()">
+    <div class="glass modal-content slide-left" onclick="event.stopPropagation()">
+      <h2>Menu & Tools</h2>
+      
+      <!-- CUSTOM CALCULATOR -->
+      <div class="glass calculator">
+        <div id="calc-display" class="calc-display">0</div>
+        <div class="calc-grid">
+          <button onclick="calc('C')">C</button>
+          <button onclick="calc('(')">(</button>
+          <button onclick="calc(')')">)</button>
+          <button onclick="calc('/')">÷</button>
+          <button onclick="calc('7')">7</button>
+          <button onclick="calc('8')">8</button>
+          <button onclick="calc('9')">9</button>
+          <button onclick="calc('*')">×</button>
+          <button onclick="calc('4')">4</button>
+          <button onclick="calc('5')">5</button>
+          <button onclick="calc('6')">6</button>
+          <button onclick="calc('-')">-</button>
+          <button onclick="calc('1')">1</button>
+          <button onclick="calc('2')">2</button>
+          <button onclick="calc('3')">3</button>
+          <button onclick="calc('+')">+</button>
+          <button onclick="calc('0')" class="span-2">0</button>
+          <button onclick="calc('.')">.</button>
+          <button onclick="calc('=')">=</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="settings-modal" class="modal-overlay" onclick="toggleSettings()">
+    <div class="glass modal-content slide-up" onclick="event.stopPropagation()">
+      <h2>Settings</h2>
+      <p>Themes</p>
+      <div class="theme-row">
+        <button onclick="setTheme('dark')">Dark</button>
+        <button onclick="setTheme('warm')">Warm</button>
+        <button onclick="setTheme('amoled')">AMOLED</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD EXPENSE -->
+  <div id="add-modal" class="modal-overlay" onclick="toggleAddExpense()">
+    <div class="glass modal-content slide-up" onclick="event.stopPropagation()">
+      <h2>Add Expense</h2>
+      <input type="number" placeholder="₹ Amount" class="input-glass" />
+      <input type="text" placeholder="Category (e.g. Food)" class="input-glass" />
+      <button class="save-btn" onclick="toggleAddExpense()">Save Expense</button>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
 </body>
 </html>
