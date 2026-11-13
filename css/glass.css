@@ -1,164 +1,144 @@
 /* ============================================
    glass.css — Liquid Glass foundation
    ============================================ */
-
 :root {
-  /* Frost — driven by settings slider later */
   --frost: 22px;
   --frost-sat: 160%;
-
-  /* Bouncy overshoot = the "Apple" feel */
   --bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* ---------- Reset ---------- */
 *, *::before, *::after { box-sizing: border-box; }
 
 html, body {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-  /* These variables come from theme.css now */
-  background: var(--bg-base);
-  color: var(--text-main);
+  margin: 0; padding: 0; min-height: 100%;
+  background: var(--bg-base); color: var(--text-main);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased; overflow: hidden; /* prevent background scroll */
   transition: background 400ms ease, color 400ms ease;
 }
 
-/* ---------- Ambient background ---------- */
+/* Ambient Light */
 .ambient {
-  position: fixed;
-  inset: -20%;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 30% 30%, var(--accent), transparent 55%),
-    radial-gradient(circle at 70% 70%, #ff6ec7, transparent 55%);
-  filter: blur(80px) saturate(140%);
-  opacity: 0.55;
+  position: fixed; inset: -20%; z-index: -1; pointer-events: none;
+  background: radial-gradient(circle at 30% 30%, var(--accent), transparent 55%),
+              radial-gradient(circle at 70% 70%, #ff6ec7, transparent 55%);
+  filter: blur(80px) saturate(140%); opacity: 0.55;
   animation: drift 18s ease-in-out infinite alternate;
-  transition: background 600ms var(--bounce), opacity 600ms ease;
 }
-
 @keyframes drift {
-  0%   { transform: translate(0, 0) scale(1); }
-  50%  { transform: translate(4%, -3%) scale(1.05); }
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(4%, -3%) scale(1.05); }
   100% { transform: translate(-3%, 4%) scale(1.02); }
 }
 
-/* Reduce Motion → static single colour, no drift */
-@media (prefers-reduced-motion: reduce) {
-  .ambient {
-    animation: none;
-    opacity: 0.25;
-    background: var(--accent);
-    filter: blur(60px);
-  }
-}
-
-/* ---------- App shell ---------- */
-.app {
-  position: relative;
-  z-index: 1;
-  min-height: 100dvh;
-  padding:
-    max(24px, env(safe-area-inset-top))
-    20px
-    max(24px, env(safe-area-inset-bottom));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-}
-
-/* ---------- The glass recipe ---------- */
+/* Glass Base */
 .glass {
-  position: relative;
-  overflow: hidden;
+  position: relative; overflow: hidden;
   background: var(--glass-bg);
   backdrop-filter: blur(var(--frost)) saturate(var(--frost-sat));
   -webkit-backdrop-filter: blur(var(--frost)) saturate(var(--frost-sat));
-  border: 1px solid var(--glass-border);
-  border-radius: 28px;
-  box-shadow:
-    inset 0 1px 0 var(--glass-highlight),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.18),
-    0 12px 40px var(--glass-shadow);
-  transition: transform 400ms var(--bounce), box-shadow 400ms ease, background 400ms ease;
+  border: 1px solid var(--glass-border); border-radius: 24px;
+  box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 -1px 0 rgba(0,0,0,0.18), 0 8px 32px var(--glass-shadow);
 }
 
-/* Moving sheen — the "glass morph" highlight */
-.glass::before {
-  content: "";
-  position: absolute;
-  inset: -50%;
-  pointer-events: none;
-  background: linear-gradient(
-    115deg,
-    transparent 40%,
-    rgba(255, 255, 255, 0.18) 50%,
-    transparent 60%
-  );
-  animation: sheen 7s ease-in-out infinite;
+/* Layout */
+body { display: flex; flex-direction: column; height: 100dvh; }
+
+.top-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: max(16px, env(safe-area-inset-top)) 20px 10px; z-index: 10;
+}
+.logo { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -0.5px; }
+.icon-btn {
+  background: none; border: none; font-size: 20px; color: var(--text-main);
+  padding: 8px; cursor: pointer; transition: transform 0.2s var(--bounce);
+}
+.icon-btn:active { transform: scale(0.85); }
+
+.app {
+  flex: 1; overflow-y: auto; padding: 10px 20px 100px;
+  display: flex; flex-direction: column; gap: 16px;
 }
 
-@keyframes sheen {
-  0%, 100% { transform: translateX(-60%); }
-  50%      { transform: translateX(60%); }
+/* Dashboard Cards */
+.balance-card { padding: 24px; text-align: left; }
+.sub { margin: 0 0 8px; color: var(--text-dim); font-size: 14px; text-transform: uppercase; letter-spacing: 1px;}
+.amount { margin: 0 0 16px; font-size: 36px; font-weight: 700; }
+.total { font-size: 16px; color: var(--text-dim); font-weight: 400; }
+.progress-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--accent); border-radius: 4px; }
+.savings { margin: 12px 0 0; font-size: 13px; color: var(--accent); }
+
+.categories { padding: 20px; }
+.categories h3 { margin: 0 0 16px; font-size: 16px; color: var(--text-dim); }
+.category-item {
+  display: flex; justify-content: space-between; padding: 12px 0;
+  border-bottom: 1px solid var(--glass-border); font-size: 16px;
+}
+.add-cat-btn {
+  margin-top: 16px; width: 100%; padding: 12px; background: transparent;
+  border: 1px dashed var(--glass-border); color: var(--text-main);
+  border-radius: 12px; cursor: pointer; transition: background 0.2s;
+}
+.add-cat-btn:active { background: var(--glass-highlight); }
+
+/* Bottom Nav */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0; padding: 16px 24px max(16px, env(safe-area-inset-bottom));
+  display: flex; justify-content: space-between; align-items: center; pointer-events: none; z-index: 10;
+}
+.nav-btn {
+  pointer-events: auto; width: 56px; height: 56px; border-radius: 28px;
+  background: var(--glass-bg); border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  color: var(--text-main); font-size: 24px; display: grid; place-items: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s var(--bounce);
+}
+.nav-btn:active { transform: scale(0.9); }
+.fab { background: var(--accent); color: #000; font-weight: bold; border: none; width: 64px; height: 64px; font-size: 32px; }
+
+/* Modals */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease; z-index: 100; padding: 20px;
+}
+.modal-overlay.active { opacity: 1; pointer-events: auto; }
+.modal-content {
+  width: 100%; max-width: 400px; background: var(--bg-base); /* solid base for modal */
+  padding: 24px; border-radius: 24px; transform: translateY(20px) scale(0.95);
+  transition: transform 0.3s var(--bounce);
+}
+.modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
+.slide-left { transform: translateX(-50px); }
+.modal-overlay.active .slide-left { transform: translateX(0); }
+
+/* Inputs */
+.input-glass {
+  width: 100%; padding: 16px; margin-bottom: 12px; background: rgba(255,255,255,0.05);
+  border: 1px solid var(--glass-border); border-radius: 12px; color: var(--text-main);
+  font-size: 16px; outline: none; transition: border 0.2s;
+}
+.input-glass:focus { border-color: var(--accent); }
+.save-btn {
+  width: 100%; padding: 16px; background: var(--accent); color: #000;
+  border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer;
+}
+.theme-row { display: flex; gap: 10px; }
+.theme-row button {
+  flex: 1; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.1);
+  border: none; color: var(--text-main); cursor: pointer;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .glass::before { animation: none; opacity: 0.15; }
-  .glass { transition: none; }
+/* Calculator */
+.calc-display {
+  font-size: 32px; text-align: right; padding: 16px; margin-bottom: 10px;
+  background: rgba(0,0,0,0.2); border-radius: 12px; word-break: break-all; min-height: 65px;
 }
-
-/* ---------- Demo card (temporary) ---------- */
-.demo-card {
-  width: 100%;
-  max-width: 380px;
-  padding: 32px 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  text-align: center;
-  margin-top: 20vh;
+.calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.calc-grid button {
+  padding: 16px; font-size: 20px; border-radius: 12px; border: 1px solid var(--glass-border);
+  background: rgba(255,255,255,0.05); color: var(--text-main); cursor: pointer;
 }
-
-.demo-icon {
-  width: 96px;
-  height: 96px;
-  border-radius: 24px;
-  display: grid;
-  place-items: center;
-  background: rgba(255, 255, 255, 0.06);
-  box-shadow: inset 0 0 0 1px var(--glass-border);
-}
-
-.demo-icon img {
-  width: 72px;
-  height: 72px;
-  object-fit: contain;
-}
-
-.demo-title {
-  font-size: 28px;
-  font-weight: 600;
-  margin: 8px 0 0;
-  letter-spacing: -0.02em;
-}
-
-.demo-sub {
-  font-size: 14px;
-  color: var(--text-dim);
-  margin: 0;
-}
-
-.demo-hint {
-  font-size: 13px;
-  color: var(--text-dim);
-  text-align: center;
-  margin: 0;
-}
+.calc-grid button:active { background: rgba(255,255,255,0.2); }
+.span-2 { grid-column: span 2; }
