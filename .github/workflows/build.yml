@@ -27,6 +27,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # THIS IS THE NEW FIX: Copying your web files into the 'www' folder
+      - name: Prepare Web Directory
+        run: |
+          mkdir -p www
+          cp index.html manifest.json Yes.png No.png www/
+          cp -r css www/
+
       - name: Add Android Platform
         run: npx cap add android
 
